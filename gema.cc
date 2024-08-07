@@ -26,83 +26,74 @@
 /// \file electromagnetic/TestEm7/TestEm7.cc
 /// \brief Main program of the electromagnetic/TestEm7 example
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManagerFactory.hh"
-#include "G4UImanager.hh"
 #include "G4SteppingVerbose.hh"
+#include "G4UImanager.hh"
 #include "Randomize.hh"
 
+#include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
-
-#include "RunAction.hh"
-#include "TrackingAction.hh"
-#include "SteppingAction.hh"
 
 #include "G4UIExecutive.hh"
 #include "G4VisExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-int main(int argc,char** argv) {
 
-  //detect interactive mode (if no arguments) and define UI session
-  G4UIExecutive* ui = nullptr;
-  if (argc == 1) ui = new G4UIExecutive(argc,argv);
+int main(int argc, char **argv)
+{
 
-  //Use SteppingVerbose with Unit
-  G4int precision = 4;
-  G4SteppingVerbose::UseBestUnit(precision);
+    // detect interactive mode (if no arguments) and define UI session
+    G4UIExecutive *ui = nullptr;
+    if (argc == 1)
+        ui = new G4UIExecutive(argc, argv);
 
-  //Construct a serial run manager
-  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
-      
-  //set mandatory initialization classes
-  //
-  DetectorConstruction*   det  = new DetectorConstruction();
-  PhysicsList*            phys = new PhysicsList();
-  
-  runManager->SetUserInitialization(det);
-  runManager->SetUserInitialization(phys);
-  
-  //set user action classes
-  //
-  PrimaryGeneratorAction* kin   = new PrimaryGeneratorAction(det);  
-  RunAction*              run   = new RunAction(det,phys,kin);
-  TrackingAction*         track = new TrackingAction(det,run);
-  SteppingAction*         step  = new SteppingAction(det,run);
-  
-  runManager->SetUserAction(kin); 
-  runManager->SetUserAction(run); 
-  runManager->SetUserAction(track);  
-  runManager->SetUserAction(step);
+    // Use SteppingVerbose with Unit
+    G4int precision = 4;
+    G4SteppingVerbose::UseBestUnit(precision);
 
-  //initialize visualization
-  G4VisManager* visManager = nullptr;
+    // Construct a serial run manager
+    auto *runManager = G4RunManagerFactory::CreateRunManager();
 
-  //get the pointer to the User Interface manager 
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+    // set mandatory initialization classes
+    //
+    DetectorConstruction *det = new DetectorConstruction();
+    PhysicsList *phys = new PhysicsList();
 
-  if (ui)  {
-    //interactive mode
-    visManager = new G4VisExecutive;
-    visManager->Initialize();
-    ui->SessionStart();
-    delete ui;
-    delete visManager;
-  } else  {
-    //batch mode  
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
-  }
+    runManager->SetUserInitialization(det);
+    runManager->SetUserInitialization(phys);
 
-  //job termination 
-  delete runManager;
+    runManager->SetUserInitialization(new ActionInitialization(det, phys));
+
+    // initialize visualization
+    G4VisManager *visManager = nullptr;
+
+    // get the pointer to the User Interface manager
+    G4UImanager *UImanager = G4UImanager::GetUIpointer();
+
+    if (ui)
+    {
+        // interactive mode
+        visManager = new G4VisExecutive;
+        visManager->Initialize();
+        ui->SessionStart();
+        delete ui;
+        delete visManager;
+    }
+    else
+    {
+        // batch mode
+        G4String command = "/control/execute ";
+        G4String fileName = argv[1];
+        UImanager->ApplyCommand(command + fileName);
+    }
+
+    // job termination
+    delete runManager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

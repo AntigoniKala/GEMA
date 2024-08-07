@@ -42,15 +42,15 @@ class RunAction;
 
 class SteppingAction : public G4UserSteppingAction
 {
-  public:
-    SteppingAction(DetectorConstruction*, RunAction*);
+public:
+    SteppingAction(DetectorConstruction *, RunAction *);
     virtual ~SteppingAction();
 
-    virtual void UserSteppingAction(const G4Step*);
-    
-  private:
-    DetectorConstruction* fDetector;
-    RunAction*            fRunAction;
+    virtual void UserSteppingAction(const G4Step *);
+
+private:
+    DetectorConstruction *fDetector;
+    RunAction *fRunAction;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
