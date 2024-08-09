@@ -1,0 +1,7 @@
+/run/numberOfThreads 4
+/run/initialize 
+/gps/particle alpha
+/gps/direction 0 0 1
+/gps/energy 270 keV
+/gps/position 0 0 -0.1 cm
+/run/beamOn 20
