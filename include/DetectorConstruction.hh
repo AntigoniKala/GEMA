@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm7/include/DetectorConstruction.hh
+/// \file electromagnetic/TestEm5/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
 //
@@ -33,75 +33,88 @@
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
-#include "G4ThreeVector.hh"
 #include "G4VUserDetectorConstruction.hh"
+#include "G4LogicalVolume.hh"
 #include "globals.hh"
+#include "G4Cache.hh"
 
-class G4LogicalVolume;
+class G4Box;
+class G4VPhysicalVolume;
 class G4Material;
+class G4MaterialCutsCouple;
 class G4UniformMagField;
 class DetectorMessenger;
-
-const G4int kMaxTally = 20;
+class G4GlobalMagFieldMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
-    DetectorConstruction();
-    virtual ~DetectorConstruction();
 
-    void SetSizeX(G4double);
-    void SetSizeYZ(G4double);
-    void SetMaterial(const G4String &);
-    void SetWorldMaterial(const G4String &);
-    void SetMagField(G4double);
+  explicit DetectorConstruction();
+  virtual ~DetectorConstruction();
 
-    void SetTallyNumber(G4int);
-    void SetTallySize(G4int, const G4ThreeVector &);
-    void SetTallyPosition(G4int, const G4ThreeVector &);
+  void SetAbsorberMaterial (const G4String&);
+  void SetAbsorberThickness(G4double);
+  void SetAbsorberSizeYZ   (G4double);
 
-    virtual G4VPhysicalVolume *Construct();
+  void SetAbsorberXpos(G4double);
 
-    inline G4double GetWorldSizeX() const { return fWorldSizeX; };
-    inline G4double GetWorldSizeYZ() const { return fWorldSizeYZ; };
-    inline G4double GetAbsorSizeX() const { return fAbsorSizeX; };
-    inline G4double GetAbsorSizeYZ() const { return fAbsorSizeYZ; };
-    inline G4int GetTallyNumber() const { return fTallyNumber; };
+  void SetWorldMaterial(const G4String&);
+  void SetWorldSizeX   (G4double);
+  void SetWorldSizeYZ  (G4double);
 
-    inline const G4Material *GetWorldMaterial() const { return fWorldMaterial; };
-    inline const G4Material *GetAbsorMaterial() const { return fAbsorMaterial; };
+  void SetMagField(G4double);
 
-    G4double GetTallyMass(G4int n) const;
-    const G4LogicalVolume *GetLogicalTally(G4int n) const;
+  G4VPhysicalVolume* Construct() override;
+  void ConstructSDandField() override;
 
-    void PrintParameters() const;
+  void PrintGeomParameters();
+
+  const G4Material* GetAbsorberMaterial() const {return fAbsorberMaterial;};
+  G4double GetAbsorberThickness() const         {return fAbsorberThickness;};
+  G4double GetAbsorberSizeYZ() const            {return fAbsorberSizeYZ;};
+
+  G4double GetAbsorberXpos() const              {return fXposAbs;};
+  G4double GetxstartAbs() const                 {return fXstartAbs;};
+  G4double GetxendAbs() const                   {return fXendAbs;};
+
+  const G4Material* GetWorldMaterial() const    {return fWorldMaterial;};
+  G4double GetWorldSizeX() const                {return fWorldSizeX;};
+
+  const G4VPhysicalVolume* GetAbsorber() const  {return fPhysiAbsorber;};
 
 private:
-    void DefineMaterials();
 
-    G4double fWorldSizeX;
-    G4double fWorldSizeYZ;
-    G4double fAbsorSizeX;
-    G4double fAbsorSizeYZ;
+  void DefineMaterials();
+  void ComputeGeomParameters();
+  void ChangeGeometry();
 
-    G4Material *fAbsorMaterial;
-    G4Material *fWorldMaterial;
+  G4Material*        fAbsorberMaterial;
+  G4double           fAbsorberThickness;
+  G4double           fAbsorberSizeYZ;
 
-    G4UniformMagField *fMagField;
-    G4LogicalVolume *fLAbsor;
-    G4LogicalVolume *fLWorld;
+  G4double           fXposAbs;
+  G4double           fXstartAbs, fXendAbs;
 
-    G4int fTallyNumber;
-    G4ThreeVector fTallySize[kMaxTally];
-    G4double fTallyMass[kMaxTally];
-    G4ThreeVector fTallyPosition[kMaxTally];
-    G4LogicalVolume *fLTally[kMaxTally];
+  G4Material*        fWorldMaterial;
+  G4double           fWorldSizeX;
+  G4double           fWorldSizeYZ;
 
-    DetectorMessenger *fDetectorMessenger;
+  G4Box*             fSolidWorld;
+  G4LogicalVolume*   fLogicWorld;
+  G4VPhysicalVolume* fPhysiWorld;
+
+  G4Box*             fSolidAbsorber;
+  G4LogicalVolume*   fLogicAbsorber;
+  G4VPhysicalVolume* fPhysiAbsorber;
+     
+  DetectorMessenger* fDetectorMessenger;
+  G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+

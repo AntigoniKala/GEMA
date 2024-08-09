@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm7/include/DetectorMessenger.hh
+/// \file electromagnetic/TestEm5/include/DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
 //
 //
@@ -38,7 +38,6 @@
 
 class DetectorConstruction;
 class G4UIdirectory;
-class G4UIcommand;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
@@ -46,30 +45,33 @@ class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger : public G4UImessenger
+class DetectorMessenger: public G4UImessenger
 {
 public:
-    DetectorMessenger(DetectorConstruction *);
-    virtual ~DetectorMessenger();
-
-    virtual void SetNewValue(G4UIcommand *, G4String);
-
+  DetectorMessenger(DetectorConstruction*);
+  ~DetectorMessenger();
+    
+  void SetNewValue(G4UIcommand*, G4String) override;
+    
 private:
-    DetectorConstruction *fDetector;
+  DetectorConstruction*      fDetector;
+    
+  G4UIdirectory*             fTestemDir;
+  G4UIdirectory*             fDetDir;
 
-    G4UIdirectory *fTestemDir;
-    G4UIdirectory *fDetDir;
-    G4UIcmdWithAString *fMaterCmd;
-    G4UIcmdWithAString *fWMaterCmd;
-    G4UIcmdWithADoubleAndUnit *fSizeXCmd;
-    G4UIcmdWithADoubleAndUnit *fSizeYZCmd;
-    G4UIcmdWithADoubleAndUnit *fMagFieldCmd;
+  G4UIcmdWithAString*        fAbsMaterCmd;
+  G4UIcmdWithADoubleAndUnit* fAbsThickCmd;
+  G4UIcmdWithADoubleAndUnit* fAbsSizYZCmd;
 
-    G4UIcmdWithAnInteger *fTalNbCmd;
-    G4UIcommand *fTalDefCmd;
-    G4UIcommand *fTalPosiCmd;
+  G4UIcmdWithADoubleAndUnit* fAbsXposCmd;
+
+  G4UIcmdWithAString*        fWorldMaterCmd;
+  G4UIcmdWithADoubleAndUnit* fWorldXCmd;
+  G4UIcmdWithADoubleAndUnit* fWorldYZCmd;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+

@@ -2,17 +2,15 @@
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "SteppingAction.hh"
-#include "TrackingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ActionInitialization::ActionInitialization(DetectorConstruction *D, PhysicsList *P) : det(D), phys(P)
+ActionInitialization::ActionInitialization()
 {
 }
 
 void ActionInitialization::BuildForMaster() const
 {
-    PrimaryGeneratorAction *kin = new PrimaryGeneratorAction(det);
-    auto runAction = new RunAction(det, phys, kin);
+    auto runAction = new RunAction();
     SetUserAction(runAction);
 }
 
@@ -20,14 +18,12 @@ void ActionInitialization::BuildForMaster() const
 
 void ActionInitialization::Build() const
 {
-    PrimaryGeneratorAction *kin = new PrimaryGeneratorAction(det);
-    RunAction *run = new RunAction(det, phys, kin);
-    TrackingAction *track = new TrackingAction(det, run);
-    SteppingAction *step = new SteppingAction(det, run);
+    PrimaryGeneratorAction *kin = new PrimaryGeneratorAction();
+    RunAction *run = new RunAction();
+    SteppingAction *step = new SteppingAction();
 
     SetUserAction(kin);
     SetUserAction(run);
-    SetUserAction(track);
     SetUserAction(step);
 }
 

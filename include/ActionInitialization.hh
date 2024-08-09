@@ -5,21 +5,18 @@
 
 /// Action initialization class (from B)
 
-class DetectorConstruction;
 class PhysicsList;
 
 class ActionInitialization : public G4VUserActionInitialization
 {
 public:
-    ActionInitialization(DetectorConstruction *, PhysicsList *);
+    ActionInitialization();
     ~ActionInitialization() override = default;
 
     void BuildForMaster() const override;
     void Build() const override;
 
 private:
-    DetectorConstruction *det;
-    PhysicsList *phys;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

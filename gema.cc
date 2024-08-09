@@ -67,7 +67,7 @@ int main(int argc, char **argv)
     runManager->SetUserInitialization(det);
     runManager->SetUserInitialization(phys);
 
-    runManager->SetUserInitialization(new ActionInitialization(det, phys));
+    runManager->SetUserInitialization(new ActionInitialization());
 
     // initialize visualization
     G4VisManager *visManager = nullptr;
