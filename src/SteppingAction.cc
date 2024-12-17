@@ -31,7 +31,7 @@ void SteppingAction::UserSteppingAction(const G4Step *step)
         G4ThreeVector mom = postPoint->GetMomentumDirection();
         G4String particleName = step->GetTrack()->GetParticleDefinition()->GetParticleName();
         G4double angle = mom.theta();
-        G4cout << preVol->GetName() << " " << postVol->GetName() << " " << angle << " " << particleName << G4endl;
+        //  G4cout << preVol->GetName() << " " << postVol->GetName() << " " << angle << " " << particleName << G4endl;
         Analman->angleDist(angle);
     }
 }

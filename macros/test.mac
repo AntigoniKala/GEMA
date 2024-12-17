@@ -1,7 +1,15 @@
 /run/numberOfThreads 4
+/testem/phys/addPhysics emstandard_opt0
+# /testem/phys/addPhysics emstandardSS
+# /testem/phys/addPhysics standardNR
+# /testem/phys/addPhysics emstandard_opt4
+# /testem/phys/addPhysics emstandardWVI
+# /testem/phys/addPhysics emstandardGS
 /run/initialize 
-/gps/particle alpha
+/gps/particle proton
 /gps/direction 0 0 1
 /gps/energy 270 keV
 /gps/position 0 0 -0.1 cm
-/run/beamOn 20
+/run/beamOn 200000
+# /run/beamOn 1000
+
